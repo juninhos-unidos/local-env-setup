@@ -36,7 +36,8 @@ jobs:
             echo ""
             echo "Como resolver:"
             echo "  git branch -m <nome-correto>"
-            echo "  git push origin <nome-correto>"
+            echo "  git push origin -u <nome-correto>"
+            echo "  git push origin --delete $BRANCH_NAME"
             echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             exit 1
           else
