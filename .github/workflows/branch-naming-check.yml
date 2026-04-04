@@ -14,28 +14,34 @@ jobs:
     steps:
       - name: Check Branch Name
         run: |
-          export PATTERN="^(feat|feature|fix|docs|style|refactor|refact|perf|test|build|chore|ci|revert|deps)\/task-[0-9]+\/[a-zA-Z0-9-].{1,100}$"
+          # Regra: tipo/task-numero/descricao (apenas 5 tipos permitidos)
+          export PATTERN="^(feature|fix|hotfix|docs|chore)\/task-[0-9]+\/[a-z0-9-]+$"
+          
           export BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
           
           if [[ ! $BRANCH_NAME =~ $PATTERN ]]; then
             echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             echo "❌ ERRO: O nome da branch '$BRANCH_NAME' está fora do padrão!"
             echo ""
-            echo "O padrão obrigatório agora é: <tipo>/task-<numero>/<descricao>"
+            echo "O padrão obrigatório é: <tipo>/task-<numero>/<descricao-curta>"
             echo ""
             echo "Tipos permitidos:"
-            echo "  feat, feature, fix, docs, style, refactor, refact, perf, test, build, chore, ci, revert, deps"
+            echo "  feature, fix, hotfix, docs, chore"
             echo ""
-            echo "Exemplos de nomes corretos conforme sua solicitação:"
-            echo "  feat/task-1/adicionar-calculo-seguro"
-            echo "  fix/task-2/corrigir-erro-validacao"
-            echo "  docs/task-3/atualizar-readme-projeto"
+            echo "Exemplos:"
+            echo "  feature/task-1/adicionar-seguro-auto"
+            echo "  fix/task-42/corrigir-npe-calculo"
+            echo "  hotfix/task-99/vulnerabilidade-critica"
+            echo "  docs/task-5/atualizar-readme"
+            echo "  chore/task-10/configurar-docker"
+            echo ""
+            echo "⚠️ Atenção: Use o nome completo 'feature' e não apenas 'feat'."
             echo ""
             echo "Como resolver:"
-            echo "  1. No seu terminal: git branch -m tipo/task-numero/descricao-curta"
-            echo "  2. Envie a nova branch: git push origin tipo/task-numero/descricao-curta"
+            echo "  git branch -m <nome-correto>"
+            echo "  git push origin <nome-correto>"
             echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             exit 1
           else
-            echo "✅ Excelente! A branch '$BRANCH_NAME' segue o padrão de rastreabilidade."
+            echo "✅ Excelente! A branch '$BRANCH_NAME' segue o padrão definido."
           fi

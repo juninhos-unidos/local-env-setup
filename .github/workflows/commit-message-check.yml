@@ -1,0 +1,60 @@
+name: "Commit Message Check"
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  commit-message-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Commit Message Check
+        run: |
+          export PATTERN="^(feat|feature|fix|docs|style|refactor|perf|test|build|chore|ci|revert|deps)(\(.+\))?: [a-zA-Z0-9].{1,100}"
+          
+          # Lógica para pegar o intervalo de commits do push ou do PR
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            RANGE="origin/${{ github.base_ref }}..HEAD"
+          else
+            RANGE="${{ github.event.before }}..${{ github.event.after }}"
+            if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+              RANGE="HEAD^..HEAD"
+            fi
+          fi
+
+          git log $RANGE --pretty=%B | while read -r MESSAGE; do
+            [ -z "$MESSAGE" ] && continue
+          
+            if [[ ! "$MESSAGE" =~ $PATTERN ]]; then
+              echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+              echo "❌ MENSAGEM DE COMMIT FORA DO PADRÃO DEFINIDO: '$MESSAGE'"
+              echo ""
+              echo "Para manter o histórico do projeto limpo, use o padrão Conventional Commits."
+              echo ""
+              echo "ESTRUTURA: <tipo>(escopo opcional): <descrição curta>"
+              echo ""
+              echo "1. TIPOS PERMITIDOS: feat, fix, docs, chore, refactor, style, test"
+              echo "2. ESPAÇO: É obrigatório ter um espaço após o ':' (dois-pontos)."
+              echo "3. DESCRIÇÃO: Deve começar com letra ou número e ser direta."
+              echo ""
+              echo "EXEMPLOS QUE PASSAM NO TESTE:"
+              echo "✅ feat(api): adicionar endpoint de consulta de apólice"
+              echo "✅ fix(db): corrigir query de busca por CPF"
+              echo "✅ docs: atualizar instruções do Docker no README"
+              echo ""
+              echo "COMO CORRIGIR:"
+              echo "git commit --amend -m \"feat(escopo): sua nova mensagem\""
+              echo "git push --force-with-lease"
+              echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+              exit 1
+            fi
+          done
