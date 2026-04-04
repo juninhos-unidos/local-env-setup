@@ -19,7 +19,7 @@ jobs:
 
       - name: Check Commit Message
         run: |
-          export PATTERN="^(feat|feature|fix|docs|style|refactor|perf|test|build|chore|ci|revert|deps)(\(.+\))?: [a-zA-Z0-9].{1,100}"
+          export PATTERN="^(feat|feature|fix|docs|style|refactor|refact|perf|test|build|chore|ci|revert|deps)(\(.+\))?: [a-zA-Z0-9].{1,100}$|^(Merge|Release|Squash|Revert|Initial|Update).*"
           
           # Lógica para pegar o intervalo de commits do push ou do PR
           if [ "${{ github.event_name }}" == "pull_request" ]; then
