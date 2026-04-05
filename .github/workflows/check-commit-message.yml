@@ -1,8 +1,8 @@
 name: "Check Commit Message"
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - main
 
 jobs:
