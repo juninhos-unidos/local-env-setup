@@ -1,0 +1,84 @@
+services:
+  postgres:
+    image: postgres:18.3-alpine
+    container_name: postgres
+    command: >
+      postgres 
+      -c shared_buffers=512MB 
+      -c max_connections=200 
+      -c checkpoint_completion_target=0.9 
+      -c synchronous_commit=off
+    environment:
+      POSTGRES_USER: ${POSTGRES_ADMIN_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASS}
+      CUSTOMERS_DB_NAME: ${POSTGRES_CUSTOMERS_DB_NAME}
+      CUSTOMERS_DB_USER: ${POSTGRES_CUSTOMERS_DB_USER}
+      CUSTOMERS_DB_PASS: ${POSTGRES_CUSTOMERS_DB_PASS}
+      INSURANCE_DB_NAME: ${POSTGRES_INSURANCE_DB_NAME}
+      INSURANCE_DB_USER: ${POSTGRES_INSURANCE_DB_USER}
+      INSURANCE_DB_PASS: ${POSTGRES_INSURANCE_DB_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
+      - postgres_data:/var/lib/postgresql/18/docker
+    networks:
+      - bridge-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_ADMIN_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:8.0.17
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASS}
+      INSURANCE_DB_NAME: ${MONGO_INSURANCE_DB_NAME}
+      INSURANCE_DB_USER: ${MONGO_INSURANCE_DB_USER}
+      INSURANCE_DB_PASS: ${MONGO_INSURANCE_DB_PASS}
+    volumes:
+      - ../mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongodb_data:/data/db
+    networks:
+      - bridge-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:8.6-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning
+    networks:
+      - bridge-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  redis_data:
+
+networks:
+  bridge-network:
+    name: bridge-network
