@@ -1,4 +1,4 @@
-name: juninhos-unidos-project
+name: juninhos-unidos
 
 include:
   - docker/database.yml
