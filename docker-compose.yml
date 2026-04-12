@@ -1,0 +1,62 @@
+name: juninhos-unidos-project
+
+include:
+  - docker/database.yml
+  - docker/broker.yml
+
+services:
+  customers-service:
+    build:
+      context: ../customers-service
+      dockerfile: Dockerfile
+    container_name: customers-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_CUSTOMERS_DB_NAME}?reWriteBatchedInserts=true
+      POSTGRES_DB_USER: ${POSTGRES_CUSTOMERS_DB_USER}
+      POSTGRES_DB_PASS: ${POSTGRES_CUSTOMERS_DB_PASS}
+      REDIS_SERVER: redis
+      KAFKA_SERVERS: kafka:29092
+      KAFKA_SCHEMA_REGISTRY_URL: http://schema-registry:9091
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - bridge-network
+
+  insurance-service:
+    build:
+      context: ../insurance-service
+      dockerfile: Dockerfile
+    container_name: insurance-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_INSURANCE_DB_NAME}?reWriteBatchedInserts=true
+      POSTGRES_DB_USER: ${POSTGRES_INSURANCE_DB_USER}
+      POSTGRES_DB_PASS: ${POSTGRES_INSURANCE_DB_PASS}
+      MONGO_DB_URL: mongodb://${MONGO_INSURANCE_DB_USER}:${MONGO_INSURANCE_DB_PASS}@mongodb:27017/${MONGO_INSURANCE_DB_NAME}?authSource=${MONGO_INSURANCE_DB_NAME}
+      REDIS_SERVER: redis
+      CUSTOMERS_SERVICE_URL: http://customers-service:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - bridge-network
+
+networks:
+  bridge-network:
+    driver: bridge
