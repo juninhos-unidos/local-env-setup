@@ -7,7 +7,7 @@ Este projeto centraliza a infraestrutura local necessária para executar os micr
 Para participar do projeto e rodar o ambiente local, você precisará instalar as seguintes ferramentas:
 
 *   **Java 21 (OpenJDK):** Pode ser instalado via [SDKMAN!](https://sdkman.io/) (Linux/macOS/WSL) ou [Scoop](https://scoop.sh/) (Windows).
-*   **Docker e Docker Compose:** Essencial para rodar a infraestrutura (bancos, mensageria e serviços).
+*   **Docker (v29+) e Docker Compose (v5+):** Essencial para rodar a infraestrutura (bancos, mensageria e serviços).
 *   **IDE:** Recomendamos o **IntelliJ IDEA**, mas o **VS Code** também pode ser utilizado.
 *   **DBeaver:** Para conectar e gerenciar o banco de dados PostgreSQL.
 *   **MongoDB Atlas / MongoDB Compass:** Para conectar e gerenciar o banco de dados MongoDB.
