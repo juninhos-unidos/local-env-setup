@@ -57,6 +57,27 @@ services:
     networks:
       - bridge-network
 
+  notifications-service:
+    build:
+      context: ../notifications-service
+      dockerfile: Dockerfile
+    container_name: notifications-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_NOTIFICATIONS_DB_NAME}?reWriteBatchedInserts=true
+      POSTGRES_DB_USER: ${POSTGRES_NOTIFICATIONS_DB_USER}
+      POSTGRES_DB_PASS: ${POSTGRES_NOTIFICATIONS_DB_PASS}
+      CUSTOMERS_SERVICE_URL: http://customers-service:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - bridge-network
+
 networks:
   bridge-network:
     driver: bridge

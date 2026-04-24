@@ -15,16 +15,17 @@ Para participar do projeto e rodar o ambiente local, você precisará instalar a
 
 ## 📦 Serviços e Portas
 
-| Serviço                 | Porta Externa | Descrição                                  |
-|:------------------------|:--------------|:-------------------------------------------|
-| **customers-service**   | `8080`        | API de Clientes                            |
-| **insurance-service**   | `8081`        | API de Seguros                             |
-| **PostgreSQL**          | `5432`        | Banco de dados relacional                  |
-| **MongoDB**             | `27017`       | Banco de dados NoSQL                       |
-| **Redis**               | `6379`        | Banco de dados em memória (Cache)          |
-| **Kafka**               | `9092`        | Broker de mensageria                       |
-| **Schema Registry**     | `9091`        | Registro de schemas do Kafka               |
-| **Kafka UI**            | `9090`        | Interface gráfica para gerenciar o Kafka   |
+| Serviço                   | Porta Externa | Descrição                                |
+|:--------------------------|:--------------|:-----------------------------------------|
+| **customers-service**     | `8080`        | API de Clientes                          |
+| **insurance-service**     | `8081`        | API de Seguros                           |
+| **notifications-service** | `8081`        | API de Notificações                      |
+| **PostgreSQL**            | `5432`        | Banco de dados relacional                |
+| **MongoDB**               | `27017`       | Banco de dados NoSQL                     |
+| **Redis**                 | `6379`        | Banco de dados em memória (Cache)        |
+| **Kafka**                 | `9092`        | Broker de mensageria                     |
+| **Schema Registry**       | `9091`        | Registro de schemas do Kafka             |
+| **Kafka UI**              | `9090`        | Interface gráfica para gerenciar o Kafka |
 
 ### 📂 Repositórios dos Serviços
 
@@ -62,6 +63,23 @@ git clone git@github.com:juninhos-unidos/insurance-service.git
 GitHub CLI:
 ```bash
 gh repo clone juninhos-unidos/insurance-service
+```
+
+**Notifications Service**
+
+HTTPS:
+```bash
+git clone https://github.com/juninhos-unidos/notifications-service.git
+```
+
+SSH:
+```bash
+git clone git@github.com:juninhos-unidos/notifications-service.git
+```
+
+GitHub CLI:
+```bash
+gh repo clone juninhos-unidos/notifications-service
 ```
 
 ## 🛠️ Como Executar
@@ -143,9 +161,16 @@ As credenciais estão predefinidas no arquivo `.env` para facilitar o setup loca
 *   **Banco**: `customers`
     *   **Usuário**: `customers_db_user`
     *   **Senha**: `customers_db_pass`
+
+    
 *   **Banco**: `insurance`
     *   **Usuário**: `insurance_db_user`
     *   **Senha**: `insurance_db_pass`
+
+
+*   **Banco**: `notifications`
+    *   **Usuário**: `notifications_db_user`
+    *   **Senha**: `notifications_db_pass`
 
 ### MongoDB (Testar no MongoDB Atlas / Compass)
 
