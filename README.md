@@ -1,6 +1,6 @@
 # Local Environment Setup
 
-Este projeto centraliza a infraestrutura local necessária para executar os microsserviços `customers-service` e `insurance-service`. Ele orquestra containers Docker para PostgreSQL, MongoDB, Redis, Kafka e as próprias aplicações Java.
+Este projeto centraliza a infraestrutura local necessária para executar os microsserviços `customers-service`, `insurance-service` e `notifications-service`. Ele orquestra containers Docker para PostgreSQL, MongoDB, Redis, Kafka e as próprias aplicações Java.
 
 ## 🚀 Pré-requisitos e Ferramentas
 
@@ -19,7 +19,7 @@ Para participar do projeto e rodar o ambiente local, você precisará instalar a
 |:--------------------------|:--------------|:-----------------------------------------|
 | **customers-service**     | `8080`        | API de Clientes                          |
 | **insurance-service**     | `8081`        | API de Seguros                           |
-| **notifications-service** | `8081`        | API de Notificações                      |
+| **notifications-service** | `8082`        | API de Notificações                      |
 | **PostgreSQL**            | `5432`        | Banco de dados relacional                |
 | **MongoDB**               | `27017`       | Banco de dados NoSQL                     |
 | **Redis**                 | `6379`        | Banco de dados em memória (Cache)        |
