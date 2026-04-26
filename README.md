@@ -187,7 +187,7 @@ As credenciais estão predefinidas no arquivo `.env` para facilitar o setup loca
 
 *   O `docker-compose.yml` inclui `healthchecks` para garantir que as aplicações só iniciem após os bancos de dados e serviços auxiliares (como Kafka e Redis) estarem prontos.
 *   O script de inicialização em `postgres/` cria as credenciais e o banco. As tabelas serão criadas via scripts de migração, pelo Flyway de cada projeto.
-*   O script de inicialização em `mongo/` cria o banco, as credenciais e define as permissões necessárias.
+*   O script de inicialização em `mongo/` cria o banco, as credenciais e define as permissões necessárias. As coleções serão criadas de forma programática por cada aplicação.
 *   O script de inicialização em `kafka/` provê um script para a criação dos tópicos necessários após a inicialização do broker.
 *   Cada serviço possui o seu próprio `README.md` com os detalhes específicos de cada implementação. 
 *   O diagrama de design do sistema e o fluxo de integrações podem ser visualizados no arquivo [system-design.png](./system-design.png).
